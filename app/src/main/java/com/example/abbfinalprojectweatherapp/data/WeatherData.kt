@@ -1,5 +1,6 @@
 package com.example.abbfinalprojectweatherapp.data
 
+import android.health.connect.datatypes.units.Temperature
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -19,6 +20,13 @@ data class CurrentWeather(
     val wind : Float,
     val humidity : Int,
     val chanceOfRain:Int
+):WeatherData()
+
+data class Forecast(
+    val time :String,
+    val temperature: Float,
+    val feelsLikeTemperature: Float,
+    val icon: String
 ):WeatherData()
 
 private fun getCurrentDate():String{

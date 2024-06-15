@@ -7,11 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.abbfinalprojectweatherapp.data.CurrentLocation
 import com.example.abbfinalprojectweatherapp.data.CurrentWeather
+import com.example.abbfinalprojectweatherapp.data.Forecast
 import com.example.abbfinalprojectweatherapp.data.LiveDataEvent
 import com.example.abbfinalprojectweatherapp.data.WeatherData
 import com.example.abbfinalprojectweatherapp.network.WeatherDataRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.Locale
 
 class HomeViewModel(private val weatherDataRepository: WeatherDataRepository):ViewModel() {
 
@@ -84,7 +88,14 @@ class HomeViewModel(private val weatherDataRepository: WeatherDataRepository):Vi
                         wind = weatherData.current.wind,
                         humidity = weatherData.current.humidity,
                         chanceOfRain = weatherData.forecast.forecastDay.first().day.chanceOfRain
-                    )
+                    ), forecast = weatherData.forecast.forecastDay.first().hourRemote.map {
+                        Forecast(
+                            time = getForecastTime(it.time),
+                            temperature = it.temperature,
+                            feelsLikeTemperature = it.feelsLikeTemperature,
+                            icon = it.condition.icon
+                        )
+                    }
                 )
             }?:emitWeatherDataUiState(error = "Unable to fetch weather data")
         }
@@ -94,9 +105,10 @@ class HomeViewModel(private val weatherDataRepository: WeatherDataRepository):Vi
     private fun emitWeatherDataUiState(
         isLoading: Boolean = false,
         currentWeather: CurrentWeather? = null,
+        forecast: List<Forecast>?=null,
         error: String?=null
     ){
-        val weatherDataState = WeatherDataState(isLoading,currentWeather,error)
+        val weatherDataState = WeatherDataState(isLoading,currentWeather,forecast,error)
         _weatherData.value = LiveDataEvent(weatherDataState)
     }
 
@@ -104,6 +116,12 @@ class HomeViewModel(private val weatherDataRepository: WeatherDataRepository):Vi
 data class WeatherDataState(
     val isLoading: Boolean,
     val currentWeather: CurrentWeather?,
+    val forecast: List<Forecast>?,
     val error: String?
 )
+    private fun getForecastTime(dateTime: String):String{
+        val pattern = SimpleDateFormat("yyyy-MMM-dd HH:mm",Locale.getDefault())
+        val date = pattern.parse(dateTime)?:return dateTime
+        return SimpleDateFormat("HH:mm",Locale.getDefault()).format(date)
+    }
 }
