@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ABBFINALPROJECTWEATHERAPP</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_location">Search Location\n</string>
+    <string name="wind">Wind</string>
+    <string name="humidity">Humidity</string>
+    <string name="rainy">Rainy</string>
+</resources>
