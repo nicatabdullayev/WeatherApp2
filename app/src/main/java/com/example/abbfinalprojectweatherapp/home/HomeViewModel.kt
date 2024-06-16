@@ -87,8 +87,8 @@ class HomeViewModel(private val weatherDataRepository: WeatherDataRepository):Vi
                         temperature = weatherData.current.temperature,
                         wind = weatherData.current.wind,
                         humidity = weatherData.current.humidity,
-                        chanceOfRain = weatherData.forecast.forecastDay.first().day.chanceOfRain
-                    ), forecast = weatherData.forecast.forecastDay.first().hourRemote.map {
+                        chanceOfRain = weatherData.forecast.forecastDay.first()?.day!!.chanceOfRain
+                    ), forecast = weatherData.forecast.forecastDay.first()?.hourRemote?.map {
                         Forecast(
                             time = getForecastTime(it.time),
                             temperature = it.temperature,

@@ -15,7 +15,7 @@ data class CurrentWeatherRemote(
 )
 
 data class ForecastRemote(
-    @SerializedName("forecastday") val forecastDay: List<ForecastDayRemote>
+    @SerializedName("forecastday") val forecastDay: List<ForecastDayRemote?>
 )
 data class ForecastDayRemote(
     val day:DayRemote,
